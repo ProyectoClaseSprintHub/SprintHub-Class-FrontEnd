@@ -33,6 +33,7 @@ export class ApiError extends Error {
     this.issues = params.issues ?? [];
   }
 
+  
   get isUnauthorized(): boolean {
     return this.code === 'unauthorized';
   }

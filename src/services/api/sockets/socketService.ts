@@ -1,5 +1,5 @@
 import { z, type ZodType } from 'zod';
-import { ApiError } from '../errors/ApiErros';
+import { ApiError } from '../errors/ApiError';
 import { errorHandler } from '../errors/errorHandler';
 import { boardDetailsDtoSchema } from '@/features/boards/schemas/boardDtoSchema';
 import { columnDtoSchema } from '@/features/columns/schemas/columnDtoSchema';

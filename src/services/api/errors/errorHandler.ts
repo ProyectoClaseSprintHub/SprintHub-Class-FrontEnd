@@ -1,5 +1,5 @@
 import { ZodError } from 'zod';
-import { ApiError, type ApiIssue } from './ApiErros';
+import { ApiError, type ApiIssue } from './ApiError';
 import type { ApiErrorBody } from '../types/ApiResponse';
 
 interface HttpResponseLike {
@@ -101,7 +101,7 @@ export function errorHandler(error: unknown): ApiError {
     });
   }
 
-  if (error instanceof Error && error.message.toLowerCase().includes('network' )) {
+  if (error instanceof Error && error.message.toLowerCase().includes('network')) {
     return new ApiError({
       message: 'No fue posible conectar con el servidor de SprintHub',
       code: 'network',

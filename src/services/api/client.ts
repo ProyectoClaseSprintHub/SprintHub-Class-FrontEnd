@@ -1,37 +1,38 @@
 import axios from "axios";
 import { env } from "@/config/env";
-import  {getAuthToken} from "./tokenStore";
-import { error } from "console";
+import { getAuthToken } from "./tokenStore";
 
 type UnauthorizedHandler = () => void;
 
 const unauthorizedHandlers = new Set<UnauthorizedHandler>();
 
-export function onUnauthorized(handler: UnauthorizedHandler): () => void {
-  unauthorizedHandlers.add(handler);
-  return() => {
+export function onUnauthorized(handler: UnauthorizedHandler): () => void{
     unauthorizedHandlers.add(handler);
-  };
+    return () => {
+        unauthorizedHandlers.delete(handler);
+    };
 }
 
 export const apiClient = axios.create({
     baseURL: `${env.apiUrl}/api`,
     timeout: 15000,
-    headers:{
+    headers: {
         'Content-Type' : 'application/json',
     },
+
 });
 
 apiClient.interceptors.request.use((config) => {
-  const token = getAuthToken();
-  if(token){
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  if(typeof FormData !== 'undefined' && config.data instanceof FormData){
-    config.headers['Content-Type'] = undefined as unknown as string;
-  }
+    const token = getAuthToken();
+    if(token){
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    if(typeof FormData !== 'undefined' && config.data instanceof FormData){
+        config.headers['Content-Type'] = undefined as unknown as string;
+    }
+        
+return config;
 
-  return config;
 });
 
 apiClient.interceptors.response.use(
@@ -49,5 +50,3 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   },
 );
-
-

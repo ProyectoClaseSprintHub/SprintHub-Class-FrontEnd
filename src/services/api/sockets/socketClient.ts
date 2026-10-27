@@ -1,6 +1,6 @@
 import { io, type Socket } from 'socket.io-client';
 import { env } from '@/config/env';
-import type { SocketBroadcastEvent, SocketEmitEvent } from './socketsEvents';
+import type { SocketBroadcastEvent, SocketEmitEvent } from './socketEvents';
 
 export type SocketConnectionStatus = 'disconnected' | 'connecting' | 'connected';
 

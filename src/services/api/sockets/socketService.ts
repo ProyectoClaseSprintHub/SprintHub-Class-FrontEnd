@@ -1,6 +1,6 @@
 import { z, type ZodType } from 'zod';
-import { ApiError } from '../errors/ApiError';
-import { errorHandler } from '../errors/errorHandler';
+import { ApiError } from '../api/errors/ApiError';
+import { errorHandler } from '../api/errors/errorHandler';
 import { boardDetailsDtoSchema } from '@/features/boards/schemas/boardDtoSchema';
 import { columnDtoSchema } from '@/features/columns/schemas/columnDtoSchema';
 import { cardDtoSchema } from '@/features/cards/schemas/cardDtoSchema';
@@ -22,7 +22,7 @@ import {
   type DeleteColumnPayload,
   type UpdateCardPayload,
   type UpdateColumnPayload,
-} from './socketsEvents';
+} from './socketEvents';
 import {
   connectSocket as connectSocketClient,
   disconnectSocket as disconnectSocketClient,

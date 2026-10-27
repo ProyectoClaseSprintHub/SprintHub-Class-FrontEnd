@@ -3,19 +3,20 @@ import { BrowserRouter } from "react-router-dom";
 import { onUnauthorized } from "@/services/api/client";
 import { useAuthStore } from "@/features/auth";
 import { AppProviders } from "./providers/AppProviders";
-import AppRoutes from "./router/AppRoute";
+import AppRoutes from "./router/AppRoutes";
 
 function App(){
-    useEffect(() =>{
-        const unsuscribete = onUnauthorized(()=>{
+    useEffect(() => {
+        const unsuscribe = onUnauthorized(()=>{
             useAuthStore.getState().logout();
         });
-        return unsuscribete;
+        return unsuscribe;
     },[]);
+
     return(
         <AppProviders>
             <BrowserRouter>
-            <AppRoutes/>
+                <AppRoutes />
             </BrowserRouter>
         </AppProviders>
     );

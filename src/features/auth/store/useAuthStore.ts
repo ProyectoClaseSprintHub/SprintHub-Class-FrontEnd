@@ -1,18 +1,20 @@
 import { create } from "zustand";
 import { setAuthToken } from "@/services/api/tokenStore";
 import { startRealtimeSession, stopRealtimeSession } from "@/services/api/sockets/socketService";
-import { login as LoginReques, register as registerRequest } from "../service/authService";
-import { clearSession, readSession, saveSession }  from "../service/sessionStorage"
-import type { AuthSession, LoginPayload, RegisterPayload } from "../types/auth.types";
+import {login as loginRequest, register as registerRequest} from '../services/authService';
+import { clearSession, readSession, saveSession } from "../services/sessionStorage";
+import type { AuthSession, LoginPayLoad, RegisterPayLoad } from "../types/auth.types";
+
 export type AuthStatus = 'authenticated' | 'guest';
+
 interface AuthState {
-    status: AuthStatus ;
+    status: AuthStatus;
     session: AuthSession | null;
 
-    login: (payload: LoginPayload) => Promise<void>;
-    register: (payload: RegisterPayload) => Promise<void>;
+    login: (payload: LoginPayLoad) => Promise<void>;
+    register: (payload: RegisterPayLoad) => Promise<void>;
     logout: () => void;
-    updateSessionUser: (user: AuthSession['user']) => void;
+    updateSessionUser: ( user: AuthSession['user']) => void;
 }
 
 function activateSession(session: AuthSession): void {
@@ -26,36 +28,39 @@ function desactivateSession(): void {
 }
 
 const storedSession = readSession();
-if (storedSession) {
+
+if(storedSession){
     activateSession(storedSession);
 }
 export const useAuthStore = create<AuthState>((set) => ({
-    status: storedSession ? 'authenticated' : 'guest',
-    session: storedSession,
 
-    login: async (payload) => {
-        const session = await LoginReques(payload);
+  status: storedSession ? 'authenticated' : 'guest',
+  session: storedSession,
+
+  login: async (payload) => {
+    const session = await loginRequest(payload);
+    saveSession(session);
+    activateSession(session);
+    set({ status: 'authenticated', session });
+  },
+
+  register: async (payload) =>{
+    await registerRequest(payload);
+  },
+
+  logout: () => {
+    clearSession();
+    desactivateSession();
+    set({status : 'guest', session: null});
+  },
+
+  updateSessionUser: (user) => {
+    set((state) => {
+        if(!state.session) return state;
+        const session : AuthSession = { ...state.session, user};
         saveSession(session);
-        activateSession(session);
-        set({ status: 'authenticated', session });
-    },
+        return { session };
+    });
+  },
 
-    register: async (payload) => {
-        await registerRequest(payload);
-    },
-
-    logout: () => {
-        clearSession();
-        desactivateSession();
-        set({ status: 'guest', session: null });
-    },
-
-    updateSessionUser: (user) => {
-        set((state) => {
-            if (!state.session) return state;
-            const session: AuthSession = { ...state.session, user };
-            saveSession(session);
-            return { session };
-        });
-    }
-}))
+}));

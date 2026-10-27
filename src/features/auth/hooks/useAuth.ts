@@ -6,9 +6,10 @@ export function useAuth() {
     const register = useAuthStore(state => state.register);
     const logout = useAuthStore(state => state.logout);
     const updateSessionUser = useAuthStore(state => state.updateSessionUser);
+
     const isAuthenticated = status === 'authenticated';
 
-    return {
+    return{
         user: session?.user ?? null,
         isAuthenticated,
         login,

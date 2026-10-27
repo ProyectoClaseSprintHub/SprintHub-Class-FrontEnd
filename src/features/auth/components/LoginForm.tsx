@@ -1,100 +1,102 @@
-import { SubmitEvent, useState} from "react";
-import { LogIn } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Alert } from "@/components/ui/Alert/Alert";
-import { Button } from "@/components/ui/Button/Button";
-import { Input } from "@/components/ui/Input/Input";
-import { zodFieldErrors } from "@/lib/zodFormErrors";
-import { loginSchema, type LoginFormData } from "../schemas/loginSchema";
-import { useLogin } from "../hooks/useLogin";
+import { useState, type FormEvent } from 'react';
+import { LogIn } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Alert } from '@/components/ui/Alert/Alert';
+import { Button } from '@/components/ui/Button/Button';
+import { Input } from '@/components/ui/Input/Input';
+import { zodFieldErrors } from '@/lib/zodFormErrors';
+import { loginSchema, type LoginFormData } from '../schemas/loginSchema';
+import { useLogin } from '../hooks/useLogin';
 import styles from './LoginForm.module.css';
 
 export function LoginForm() {
-    const [values, setValues] = useState<LoginFormData>({ email: '', password: ''});
-    const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-    const {  loading, error, submit } = useLogin();
-    const navigate = useNavigate();
-    const location = useLocation();
+  const [values, setValues] = useState<LoginFormData>({ email: '', password: '' });
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const { loading, error, submit } = useLogin();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-    const handleChange = (field: keyof LoginFormData) => (
-        event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        setValues((current) => ({...current, [field]: event.target.value}));
-        setFieldErrors((current) => {
-            if(!current[field]) return current;
-            const next = {...current};
-            delete next[field];
-            return next;
-        });
-    };
+  const handleChange = (field: keyof LoginFormData) => (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setValues((current) => ({ ...current, [field]: event.target.value }));
+    setFieldErrors((current) => {
+      if (!current[field]) return current;
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  };
 
-    const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const parsed = loginSchema.safeParse(values)
-        if(!parsed.success){
-            setFieldErrors(zodFieldErrors(parsed.error.issues));
-            return;
-        }
-        setFieldErrors({});
-        const succeded = await submit(parsed.data);
-        if(succeded){
-            const from = location.state?.from;
-            if(from && typeof from.pathname === 'string'){
-                navigate(`${from.pathname}${from.search ?? ''}${from.hash ?? ''}`, { replace: true });
-                return;
-            }
-            navigate('/dashboard', {replace: true});
-        }
-    };
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const parsed = loginSchema.safeParse(values);
+    if (!parsed.success) {
+      setFieldErrors(zodFieldErrors(parsed.error.issues));
+      return;
+    }
+    setFieldErrors({});
+    const succeeded = await submit(parsed.data);
+    if (succeeded) {
+      const from = location.state?.from;
 
-    return (
-        <form onSubmit={handleSubmit} noValidate className={styles.form}>
-            {error && !error.hasValidationIssues ? (
-                <Alert variant={error.isUnauthorized || error.isNetworkError ? 'warning' : 'danger'} title="No se pudo iniciar sesión">
-                    {error.message}
-                </Alert>
-            ): null }
+      if (from && typeof from.pathname === 'string') {
+        navigate(`${from.pathname}${from.search ?? ''}${from.hash ?? ''}`, { replace: true });
+        return;
+      }
 
-            <Input
-                label="Correo electronico"
-                type="email"
-                name="email"
-                autoComplete="email"
-                placeholder="tu@correo.com"
-                required
-                value={values.email}
-                onChange={handleChange('email')}
-                error={fieldErrors.email}
-                disabled={loading}
-            />
+      navigate('/dashboard', { replace: true });
+    }
+  };
 
-            <Input
-                label="Contraseña"
-                type="password"
-                name="password"
-                autoComplete="current-pasword"
-                placeholder="*******"
-                required
-                value={values.password}
-                onChange={handleChange('password')}
-                error={fieldErrors.password}
-                disabled={loading}
-            />
+  return (
+    <form onSubmit={handleSubmit} noValidate className={styles.form}>
+      {error && !error.hasValidationIssues ? (
+        <Alert variant={error.isUnauthorized || error.isNetworkError ? 'warning' : 'danger'} title="No se pudo iniciar sesión">
+          {error.message}
+        </Alert>
+      ) : null}
 
-            <Button type="submit" loading={loading} icon={<LogIn aria-hidden="true" className="icon-md" />}>
-            Iniciar Sesión
-            </Button>
+      <Input
+        label="Correo electrónico"
+        type="email"
+        name="email"
+        autoComplete="email"
+        placeholder="tu@correo.com"
+        required
+        value={values.email}
+        onChange={handleChange('email')}
+        error={fieldErrors.email}
+        disabled={loading}
+      />
 
-            <p className={styles.switch}>
-                ¿Aun no tienes cuenta?
-                <button
-                    type="button"
-                    onClick={()=> navigate('/register')}
-                    className={styles.switchAction}
-                >
-                    Registrate
-                </button>
-            </p>
-        </form>
-    );
+      <Input
+        label="Contraseña"
+        type="password"
+        name="password"
+        autoComplete="current-password"
+        placeholder="••••••••"
+        required
+        value={values.password}
+        onChange={handleChange('password')}
+        error={fieldErrors.password}
+        disabled={loading}
+      />
+
+      <Button type="submit" loading={loading} icon={<LogIn aria-hidden="true" className="icon-md" />}>
+        Iniciar sesión
+      </Button>
+
+      <p className={styles.switch}>
+        ¿Aún no tienes cuenta?{' '}
+        <button
+          type="button"
+          onClick={() => navigate('/register')}
+          className={styles.switchAction}
+        >
+          Regístrate
+        </button>
+      </p>
+    </form>
+  );
 }

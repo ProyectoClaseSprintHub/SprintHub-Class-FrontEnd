@@ -1,7 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useToast } from '@/components/ui/Toast/Toast';
 import { errorHandler } from '@/services/api/errors/errorHandler';
-import { createCard, deleteCard,updateCard } from '@/services/api/sockets/socketService';
+import {
+  createCard,
+  deleteCard,
+  updateCard,
+} from '@/services/socket/socketService';
 import { useActiveBoardStore } from '@/features/boards/store/useActiveBoardStore';
 import type { CardPriority } from '../types/card.dto';
 import type { CreateCardFormData, UpdateCardFormData } from '../schemas/cardFormSchema';

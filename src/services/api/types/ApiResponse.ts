@@ -1,17 +1,17 @@
 export type ApiMessageResponse = {
-    message: string;
+  message: string;
 };
 
 export type ApiDataResponse<TData> = {
-    data: TData;
+  data: TData;
 };
 
-export type ApiDataMessageResponse<TData> ={
-    data: TData;
-    message: string;
+export type ApiDataMessageResponse<TData> = {
+  data: TData;
+  message: string;
 };
 
-export type ApiErrorBody ={
-    message?: string;
-    errors?: unknown;
-}
+export type ApiErrorBody = {
+  message?: string;
+  errors?: unknown;
+};

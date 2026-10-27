@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { userReferenceSchema } from '@/features/auth/schemas/UserReferenceSchema';
+import { userReferenceSchema } from '@/features/auth/schemas/userReferenceSchema';
 
 export const cardDtoSchema = z.object({
   id: z.string(),

@@ -5,16 +5,13 @@ import { useAuthStore } from "@/features/auth";
 import { AppProviders } from "./providers/AppProviders";
 import AppRoutes from "./router/AppRoutes";
 
-
-
 function App(){
-    useEffect(() =>{
-        const unsuscribe = onUnauthorized(() => {
+    useEffect(() => {
+        const unsuscribe = onUnauthorized(()=>{
             useAuthStore.getState().logout();
         });
         return unsuscribe;
     },[]);
-
 
     return(
         <AppProviders>

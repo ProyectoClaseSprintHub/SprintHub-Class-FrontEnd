@@ -1,4 +1,4 @@
-import { useAuthStore } from '../store/useAuthStore';
+import { useAuthStore } from "../store/useAuthStore";
 
 export function useAuth() {
     const status = useAuthStore(state => state.status);
@@ -20,11 +20,3 @@ export function useAuth() {
     };
 
 }
-
-
-
-
-
-
-
-

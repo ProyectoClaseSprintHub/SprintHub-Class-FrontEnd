@@ -49,10 +49,3 @@ export function useRegister() {
 
   return { loading, error, submit };
 }
-
-
-
-
-
-
-

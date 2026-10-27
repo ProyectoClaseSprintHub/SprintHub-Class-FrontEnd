@@ -1,9 +1,24 @@
+
 import { create } from 'zustand';
 import { setAuthToken } from '@/services/api/tokenStore';
-import { startRealtimeSession, stopRealtimeSession } from '@/services/socket/socketService';
-import { login as loginRequest, register as registerRequest } from '../services/authService';
-import { clearSession, readSession, saveSession } from '../services/sessionStorage';
-import type { AuthSession, LoginPayload, RegisterPayload } from '../types/auth.types';
+import {
+  startRealtimeSession,
+  stopRealtimeSession,
+} from '@/services/socket/socketService';
+import {
+  login as LoginRequest,
+  register as registerRequest,
+} from '../services/authService';
+import {
+  clearSession,
+  readSession,
+  saveSession,
+} from '../services/sessionStorage';
+import type {
+  AuthSession,
+  LoginPayload,
+  RegisterPayload,
+} from '../types/auth.types';
 
 export type AuthStatus = 'authenticated' | 'guest';
 
@@ -38,10 +53,15 @@ export const useAuthStore = create<AuthState>((set) => ({
   session: storedSession,
 
   login: async (payload) => {
-    const session = await loginRequest(payload);
+    const session = await LoginRequest(payload);
+
     saveSession(session);
     activateSession(session);
-    set({ status: 'authenticated', session });
+
+    set({
+      status: 'authenticated',
+      session,
+    });
   },
 
   register: async (payload) => {
@@ -51,15 +71,30 @@ export const useAuthStore = create<AuthState>((set) => ({
   logout: () => {
     clearSession();
     deactivateSession();
-    set({ status: 'guest', session: null });
+
+    set({
+      status: 'guest',
+      session: null,
+    });
   },
 
   updateSessionUser: (user) => {
     set((state) => {
-      if (!state.session) return state;
-      const session: AuthSession = { ...state.session, user };
+      if (!state.session) {
+        return state;
+      }
+
+      const session: AuthSession = {
+        ...state.session,
+        user,
+      };
+
       saveSession(session);
+
       return { session };
     });
   },
 }));
+
+
+

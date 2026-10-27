@@ -1,6 +1,8 @@
 import { AuthFormLayout } from '../components/AuthFormLayout';
 import { RegisterForm } from '../components/RegisterForm';
 
+
+
 export function RegisterPage() {
   return (
     <AuthFormLayout
@@ -11,3 +13,7 @@ export function RegisterPage() {
     </AuthFormLayout>
   );
 }
+
+
+
+

@@ -1,5 +1,5 @@
-import { useAuth } from "@/features/auth/hooks/useAuth";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 
 function ProtectedRoute() {
@@ -16,9 +16,9 @@ function ProtectedRoute() {
             />
         );
     }
+    
 
     return <Outlet />
-
 }
 
 export default ProtectedRoute;

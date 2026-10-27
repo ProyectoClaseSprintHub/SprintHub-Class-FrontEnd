@@ -130,6 +130,8 @@ export function RegisterForm() {
         Crear cuenta
       </Button>
 
+
+
       <p className={styles.switch}>
         ¿Ya tienes cuenta?{' '}
         <button
@@ -143,3 +145,15 @@ export function RegisterForm() {
     </form>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+

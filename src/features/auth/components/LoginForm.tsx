@@ -9,12 +9,16 @@ import { loginSchema, type LoginFormData } from '../schemas/loginSchema';
 import { useLogin } from '../hooks/useLogin';
 import styles from './LoginForm.module.css';
 
+
+
 export function LoginForm() {
   const [values, setValues] = useState<LoginFormData>({ email: '', password: '' });
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const { loading, error, submit } = useLogin();
   const navigate = useNavigate();
   const location = useLocation();
+
+
 
   const handleChange = (field: keyof LoginFormData) => (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -27,6 +31,8 @@ export function LoginForm() {
       return next;
     });
   };
+
+
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,6 +55,7 @@ export function LoginForm() {
     }
   };
 
+
   return (
     <form onSubmit={handleSubmit} noValidate className={styles.form}>
       {error && !error.hasValidationIssues ? (
@@ -56,6 +63,7 @@ export function LoginForm() {
           {error.message}
         </Alert>
       ) : null}
+
 
       <Input
         label="Correo electrónico"
@@ -69,6 +77,7 @@ export function LoginForm() {
         error={fieldErrors.email}
         disabled={loading}
       />
+
 
       <Input
         label="Contraseña"
@@ -100,3 +109,21 @@ export function LoginForm() {
     </form>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

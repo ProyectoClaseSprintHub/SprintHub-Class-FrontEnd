@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { AuthSession } from '../types/auth.types';
+import type { AuthSession } from '@/services/uploads/api/types/auth.types';
 
 export const authSessionSchema = z.object({
   token: z.string().min(1, { error: 'La sesión no contiene un token válido' }),
